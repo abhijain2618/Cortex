@@ -1,6 +1,14 @@
 
 # 🧠 Private-First Local LLM Enterprise RAG
 
+<p align="center">
+  <img src="https://img.shields.io/badge/LLM-Local%20First-brightgreen" />
+  <img src="https://img.shields.io/badge/RAG-Production%20Ready-blue" />
+  <img src="https://img.shields.io/badge/Privacy-100%25%20Local-success" />
+  <img src="https://img.shields.io/badge/Stack-Full%20TypeScript-black" />
+  <img src="https://img.shields.io/badge/Docker-Ready-2496ED" />
+</p>
+
 > **A production-grade Retrieval-Augmented Generation (RAG) system running 100% locally — no cloud APIs, no data leaks, full observability. Built to demonstrate depth in AI systems architecture, full-stack engineering, and real-world distributed design.**
 
 ---
