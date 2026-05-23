@@ -1,0 +1,34 @@
+{
+  "name": "@repo/api",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "dev": "tsx src/server.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^25.8.0",
+    "@types/pg": "^8.20.0",
+    "tsx": "^4.22.0",
+    "@repo/typescript-config": "*"
+  },
+  "dependencies": {
+    "@ai-sdk/openai": "^3.0.64",
+    "@fastify/cors": "^11.2.0",
+    "@fastify/multipart": "^10.0.0",
+    "@napi-rs/canvas": "^1.0.0",
+    "ai": "^6.0.184",
+    "ai-sdk-ollama": "^3.8.4",
+    "axios": "^1.16.1",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "fastify": "^5.8.5",
+    "pdf-parse": "^1.1.1",
+    "pdfjs-dist": "^5.7.284",
+    "pg": "^8.20.0"
+  }
+}

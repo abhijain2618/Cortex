@@ -1,0 +1,18 @@
+{
+  "globalEnv": [
+    "DATABASE_URL",
+    "OLLAMA_BASE_URL",
+    "NEXT_PUBLIC_API_URL"
+  ],
+  "tasks": {
+    "dev": {
+      "cache": false,
+      "persistent": true,
+      "env": [
+        "DATABASE_URL",
+        "OLLAMA_BASE_URL",
+        "NEXT_PUBLIC_API_URL"
+      ]
+    }
+  }
+}

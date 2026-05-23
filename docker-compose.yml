@@ -1,0 +1,104 @@
+services:
+  # -------------------------
+  # PostgreSQL + pgvector
+  # -------------------------
+  db:
+    image: pgvector/pgvector:pg17
+    container_name: rag-db
+    restart: always
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: ragdb
+
+    ports:
+      - "5432:5432"
+
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ../packages/db:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # -------------------------
+  # Ollama server
+  # -------------------------
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    restart: always
+
+    ports:
+      - "11434:11434"
+
+    volumes:
+      - ollama:/root/.ollama
+
+  # -------------------------
+  # Model bootstrap (RUNS ONCE)
+  # -------------------------
+  ollama-init:
+    image: ollama/ollama:latest
+    container_name: ollama-init
+
+    depends_on:
+      - ollama
+
+    environment:
+      OLLAMA_HOST: http://ollama:11434
+
+    volumes:
+      - ollama:/root/.ollama
+
+    entrypoint: >
+      sh -c "
+      echo 'Waiting for Ollama...' &&
+      until ollama list >/dev/null 2>&1; do
+        sleep 2;
+      done;
+
+      echo 'Pulling models...' &&
+      ollama pull phi3:mini &&
+      ollama pull nomic-embed-text &&
+      echo 'Done'
+      "
+
+    restart: "no"
+  # -------------------------
+  # Dev app (Next.js / Turbo)
+  # -------------------------
+  dev:
+    image: node:22-alpine
+    container_name: turbo-dev
+    working_dir: /app
+
+    ports:
+      - "3000:3000"
+      - "3001:3001"
+
+    environment:
+      DATABASE_URL: postgres://postgres:postgres@db:5432/ragdb
+      OLLAMA_BASE_URL: http://ollama:11434
+      NEXT_PUBLIC_API_URL: http://localhost:3001
+
+    volumes:
+      - .:/app
+
+    command: sh -c "npm install && npx turbo run dev"
+
+    depends_on:
+      db:
+        condition: service_healthy
+      ollama:
+        condition: service_healthy
+      ollama-init:
+        condition: service_completed_successfully
+
+volumes:
+  pgdata:
+  ollama:
